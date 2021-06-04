@@ -106,17 +106,17 @@ public class Path<O> implements Iterable<O>
 	 */
 	public boolean reaches(O obj)
 	{
-		if(!tgt.equals(obj))
+		if(tgt.equals(obj))
 		{
-			if(src != null)
-			{
-				return src.reaches(obj);
-			}
-			
-			return false;
+			return true;
 		}
 		
-		return true;
+		if(src != null)
+		{
+			return src.reaches(obj);
+		}
+
+		return false;
 	}
 
 	/**
