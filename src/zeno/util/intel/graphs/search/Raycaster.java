@@ -4,10 +4,13 @@ import java.util.Iterator;
 
 import zeno.util.coll.space.planar.TiledSpace2D;
 import zeno.util.coll.space.planar.TiledSpace2D.Tile2D;
+import zeno.util.intel.graphs.search.rays.RCCIterator;
 import zeno.util.intel.graphs.search.rays.RCIterator;
+import zeno.util.tools.Floats;
+import zeno.util.tools.Integers;
 
 /**
- * The {@code Raycaster} class generates an emission circle in a {@link TiledSpace2D}.
+ * The {@code Raycaster} class generates an emission diamond in a {@link TiledSpace2D}.
  * </br> The algorithm used is a variant of the {@code precise permissive field of view}.
  * 
  * @author Zeno
@@ -20,67 +23,71 @@ import zeno.util.intel.graphs.search.rays.RCIterator;
  * @see Iterable
  * @see Tile2D
  */
-public class Raycaster<T extends Tile2D> implements Iterable<T>
-{		
+public interface Raycaster<T extends Tile2D> extends Iterable<T>
+{	
 	/**
-	 * The {@code Source} interface defines the source of a {@link Raycaster}.
-	 * 
+	 * The {@code Circular} interface defines a {@code Raycaster} with a circular emission.
+	 *
 	 * @author Waffles
-	 * @since Nov 22, 2014
+	 * @since 16 Jun 2021
 	 * @version 1.0
 	 * 
 	 * 
-	 * @param <T> a tile type
+	 * @param <T>  a tile type
 	 * @see Raycaster
 	 * @see Tile2D
 	 */
-	public static interface Source<T extends Tile2D>
-	{		
+	public static interface Circular<T extends Tile2D> extends Raycaster<T>
+	{
 		/**
-		 * Checks if a tile blocks rays from the {@code Source}.
-		 * </br> If the tile is null, always return true.
+		 * Returns the radius of the {@code Raycaster}.
 		 * 
-		 * @param tile  a target tile
-		 * @return {@code true} if a ray is blocked
+		 * @return  a raycasting radius
 		 */
-		public abstract boolean blocksRay(T tile);
+		public abstract float Radius();
 		
-		/**
-		 * Returns the caster radius of the {@code Source}.
-		 * 
-		 * @return  a caster radius
-		 */
-		public abstract int Radius();
 		
-		/**
-		 * Returns the tile of the {@code Source}.
-		 * 
-		 * @return  a source tile
-		 */
-		public abstract T Tile();
+		@Override
+		public default Iterator<T> iterator()
+		{
+			return new RCCIterator<>(this);
+		}
+		
+		@Override
+		public default int Diagonal()
+		{
+			return Integers.ceil(Floats.SQRT2 * Radius());
+		}
 	}
 	
 	
-	private Source<T> source;
-	private TiledSpace2D<T> target;
-
+	@Override
+	public default Iterator<T> iterator()
+	{
+		return new RCIterator<>(this);
+	}
+	
 	/**
-	 * Creates a new {@code Raycaster}.
+	 * Returns the column of the {@code Raycaster}.
 	 * 
-	 * @param src  a raycaster source
-	 * @param tgt  a raycaster target
-	 * 
-	 * 
-	 * @see TiledSpace2D
-	 * @see Source
+	 * @return  a grid column
 	 */
-	public Raycaster(Source<T> src, TiledSpace2D<T> tgt)
-	{	
-		source = src;
-		target = tgt;
+	public default int Column()
+	{
+		return Tile().Column();
 	}
-
-		
+	
+	/**
+	 * Returns the row of the {@code Raycaster}.
+	 * 
+	 * @return  a grid row
+	 */
+	public default int Row()
+	{
+		return Tile().Row();
+	}
+	
+	
 	/**
 	 * Returns the target of the {@code Raycaster}.
 	 * 
@@ -89,28 +96,29 @@ public class Raycaster<T extends Tile2D> implements Iterable<T>
 	 * 
 	 * @see TiledSpace2D
 	 */
-	public TiledSpace2D<T> Target()
-	{
-		return target;
-	}
+	public abstract TiledSpace2D<T> Target();
 	
 	/**
-	 * Returns the source of the {@code Raycaster}.
+	 * Checks if a tile blocks the {@code Raycaster}.
+	 * </br> If the tile is null, always return true.
 	 * 
-	 * @return  a raycaster source
-	 * 
-	 * 
-	 * @see Source
+	 * @param t  a target tile
+	 * @return {@code true} if a ray is blocked
 	 */
-	public Source<T> Source()
-	{
-		return source;
-	}
+	public abstract boolean blocksRay(T t);
+		
+	/**
+	 * Returns the diagonal of the {@code Raycaster}.
+	 * </br> This determines the maximum size of the generated diamonds.
+	 * 
+	 * @return  a caster radius
+	 */
+	public abstract int Diagonal();
 	
-	
-	@Override
-	public Iterator<T> iterator()
-	{
-		return new RCIterator<>(this);
-	}
+	/**
+	 * Returns the tile of the {@code Raycaster}.
+	 * 
+	 * @return  a source tile
+	 */
+	public abstract T Tile();
 }
