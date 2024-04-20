@@ -1,8 +1,8 @@
 package waffles.utils.intel.graphs.search;
 
-import waffles.utils.intel.Algorithm;
 import waffles.utils.intel.graphs.Path;
 import waffles.utils.intel.utilities.cost.Heuristic;
+import waffles.utils.phys.utilities.events.SteppedEvent;
 
 /**
  * The {@code AStarSearch} algorithm computes an optimal path between connected objects.
@@ -19,19 +19,10 @@ import waffles.utils.intel.utilities.cost.Heuristic;
  * 
  * @see <a href="http://en.wikipedia.org/wiki/A*">A* search algorithm</a>
  * @param <O>  an object type
- * @see Algorithm
+ * @see SteppedEvent
  */
-public class AStarSearch<O> implements Algorithm
+public class AStarSearch<O> extends SteppedEvent
 {	
-	static enum State
-	{
-		RUNNING,
-		ABORTED,
-		IDLE;
-	}
-	
-	
-	private State state;
 	private Heuristic<O> heur;
 	private AStarHandler<O> data;
 	
@@ -48,7 +39,6 @@ public class AStarSearch<O> implements Algorithm
 	 */
 	public AStarSearch(Heuristic<O> h)
 	{
-		state = State.IDLE;
 		heur = h;
 	}
 	
@@ -61,8 +51,8 @@ public class AStarSearch<O> implements Algorithm
 	public void start(O src, O tgt)
 	{
 		data = new AStarHandler<>(heur, src, tgt);
-		state = State.RUNNING;
 		target = tgt;
+		run();
 	}
 	
 	/**
@@ -80,37 +70,22 @@ public class AStarSearch<O> implements Algorithm
 	
 
 	@Override
-	public boolean isIdle()
+	public void onStep()
 	{
-		return state != State.RUNNING;
-	}
-
-	@Override
-	public void step()
-	{
-		// If the algorithm is idle...
-		if(isIdle())
-		{
-			// ...bail.
-			return;
-		}
-
 		// Find the next path.
 		path = data.next();
 		// If none was found...
 		if(path == null)
 		{
-			// Abort the search.
-			state = State.ABORTED;
-			return;
+			// Finish the search.
+			pause(); return;
 		}
 		
 		// If it reaches the destination...
 		if(path.endsAt(target))
 		{
 			// Finish the search.
-			state = State.IDLE;
-			return;
+			pause(); return;
 		}
 
 		
