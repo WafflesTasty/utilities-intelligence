@@ -1,7 +1,7 @@
 package waffles.utils.intel.graphs.search;
 
-import waffles.utils.intel.graphs.Heuristic;
 import waffles.utils.intel.graphs.Path;
+import waffles.utils.intel.utilities.cost.Heuristic;
 import waffles.utils.sets.keymaps.delegate.JHashMap;
 import waffles.utils.sets.queues.ordered.BSQueue;
 import waffles.utils.tools.primitives.Floats;

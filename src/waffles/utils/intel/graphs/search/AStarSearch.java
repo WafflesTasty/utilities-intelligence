@@ -1,8 +1,8 @@
 package waffles.utils.intel.graphs.search;
 
 import waffles.utils.intel.Algorithm;
-import waffles.utils.intel.graphs.Heuristic;
 import waffles.utils.intel.graphs.Path;
+import waffles.utils.intel.utilities.cost.Heuristic;
 
 /**
  * The {@code AStarSearch} algorithm computes an optimal path between connected objects.
