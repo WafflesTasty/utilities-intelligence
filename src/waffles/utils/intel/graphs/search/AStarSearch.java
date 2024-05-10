@@ -32,13 +32,15 @@ public class AStarSearch<O> extends SteppedEvent
 	/**
 	 * Creates a new {@code AStarSearch}.
 	 * 
+	 * @param b  a beat time
 	 * @param h  a path heuristic
 	 * 
 	 * 
 	 * @see Heuristic
 	 */
-	public AStarSearch(Heuristic<O> h)
+	public AStarSearch(long b, Heuristic<O> h)
 	{
+		super(b);
 		heur = h;
 	}
 	
@@ -70,7 +72,7 @@ public class AStarSearch<O> extends SteppedEvent
 	
 
 	@Override
-	public void onStep()
+	public void onPulse(long beat)
 	{
 		// Find the next path.
 		path = data.next();
