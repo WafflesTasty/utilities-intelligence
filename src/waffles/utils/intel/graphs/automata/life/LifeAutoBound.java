@@ -1,4 +1,4 @@
-package waffles.utils.intel.graphs.life;
+package waffles.utils.intel.graphs.automata.life;
 
 /**
  * A {@code LifeAutoBound} defines boundary check parameters for a {@code LifeAutomaton}.

@@ -21,4 +21,26 @@ public enum Mortality
 	 * Death.
 	 */
 	DEAD;
+	
+	
+	/**
+	 * Inverts a {@code Mortality} state.
+	 * 
+	 * @param mrt  a mortality state
+	 * @return  an inverse mortality
+	 */
+	public static Mortality invert(Mortality mrt)
+	{
+		switch(mrt)
+		{
+		case ALIVE:
+			return Mortality.DEAD;
+		case DEAD:
+			return Mortality.ALIVE;
+		case UNDEAD:
+			return Mortality.ALIVE;
+		default:
+			return Mortality.UNDEAD;
+		}
+	}
 }

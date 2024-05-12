@@ -1,4 +1,4 @@
-package waffles.utils.intel.graphs.search;
+package waffles.utils.intel.graphs.pathing;
 
 import waffles.utils.intel.graphs.Path;
 import waffles.utils.intel.utilities.cost.Heuristic;
