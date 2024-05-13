@@ -127,6 +127,12 @@ public class SandAutoLayout<T extends SandAutoTile> implements AutoLayout<SandAu
 	}
 	
 	@Override
+	public int AutoRadius()
+	{
+		return 1;
+	}
+	
+	@Override
 	public long Beat()
 	{
 		return beat;

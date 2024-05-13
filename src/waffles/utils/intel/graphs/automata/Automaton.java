@@ -81,6 +81,16 @@ public class Automaton<A extends AutoAction, T extends AutoTile> extends PulseEv
 	}
 	
 	/**
+	 * Returns the radius of the {@code Automaton}.
+	 * 
+	 * @return  a tile radius
+	 */
+	public int AutoRadius()
+	{
+		return layout.AutoRadius();
+	}
+	
+	/**
 	 * Enables the entire {@code Automaton}.
 	 */
 	public void enableAll()

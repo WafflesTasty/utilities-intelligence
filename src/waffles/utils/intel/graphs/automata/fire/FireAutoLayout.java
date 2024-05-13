@@ -33,6 +33,16 @@ public interface FireAutoLayout<T extends FireAutoTile> extends AutoLayout<FireA
 	}
 	
 	/**
+	 * Returns the fire rate of the {@code FireAutoLayout}.
+	 * 
+	 * @return  a fire rate
+	 */
+	public default float FireRate()
+	{
+		return 0.25f;
+	}
+	
+	/**
 	 * Returns the fire spread of the {@code FireAutoLayout}.
 	 * 
 	 * @return  a spread chance
@@ -46,5 +56,11 @@ public interface FireAutoLayout<T extends FireAutoTile> extends AutoLayout<FireA
 	public default FireAutoAction create(FireAutoTile tile)
 	{
 		return new FireAutoAction(this, tile);
+	}
+	
+	@Override
+	public default int AutoRadius()
+	{
+		return 1;
 	}
 }

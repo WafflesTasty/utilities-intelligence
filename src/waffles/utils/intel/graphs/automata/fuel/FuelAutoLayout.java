@@ -1,7 +1,6 @@
 package waffles.utils.intel.graphs.automata.fuel;
 
 import waffles.utils.intel.graphs.automata.AutoLayout;
-import waffles.utils.intel.graphs.automata.fire.FireAutoTile;
 
 /**
  * A {@code FuelAutoLayout} defines the parameters to generate a {@code FuelAutomaton}.
@@ -13,11 +12,11 @@ import waffles.utils.intel.graphs.automata.fire.FireAutoTile;
  * 
  * @param <T>  a tile type
  * @see FuelAutoAction
- * @see FireAutoTile
+ * @see FuelAutoTile
  * @see AutoLayout
  */
 @FunctionalInterface
-public interface FuelAutoLayout<T extends FireAutoTile> extends AutoLayout<FuelAutoAction, T>
+public interface FuelAutoLayout<T extends FuelAutoTile> extends AutoLayout<FuelAutoAction, T>
 {	
 	/**
 	 * Returns the fuel rate of the {@code FuelAutoLayout}.
@@ -26,12 +25,19 @@ public interface FuelAutoLayout<T extends FireAutoTile> extends AutoLayout<FuelA
 	 */
 	public default float FuelRate()
 	{
-		return 0.1f;
+		return 0.25f;
+	}
+	
+	
+	@Override
+	public default FuelAutoAction create(FuelAutoTile tile)
+	{
+		return new FuelAutoAction(this, tile);
 	}
 	
 	@Override
-	public default FuelAutoAction create(FireAutoTile tile)
+	public default int AutoRadius()
 	{
-		return new FuelAutoAction(this, tile);
+		return 0;
 	}
 }

@@ -1,14 +1,11 @@
 package waffles.utils.intel.graphs.automata.fuel;
 
 import waffles.utils.intel.graphs.automata.AutoAction;
-import waffles.utils.intel.graphs.automata.fire.FireAutoTile;
-import waffles.utils.intel.graphs.automata.life.LifeAutoLayout;
-import waffles.utils.intel.graphs.automata.life.LifeAutoTile;
 import waffles.utils.intel.utilities.Mortality;
 import waffles.utils.tools.primitives.Floats;
 
 /**
- * A {@code FireAutoAction} defines the local behavior of a {@code FireAutomaton}.
+ * A {@code FuelAutoAction} defines the local behavior of a {@code FuelAutomaton}.
  *
  * @author Waffles
  * @since 10 May 2024
@@ -21,19 +18,19 @@ public class FuelAutoAction implements AutoAction
 {
 	private Mortality mrt;
 	private float fuel, rate;
-	private FireAutoTile tile;
+	private FuelAutoTile tile;
 	
 	/**
-	 * Creates a new {@code LifeAutoAction}.
+	 * Creates a new {@code FuelAutoAction}.
 	 * 
 	 * @param lyt  an automaton layout
 	 * @param lat  an automaton tile
 	 * 
 	 * 
-	 * @see LifeAutoLayout
-	 * @see LifeAutoTile
+	 * @see FuelAutoLayout
+	 * @see FuelAutoTile
 	 */
-	public FuelAutoAction(FuelAutoLayout<?> lyt, FireAutoTile lat)
+	public FuelAutoAction(FuelAutoLayout<?> lyt, FuelAutoTile lat)
 	{
 		rate = lyt.FuelRate();
 		mrt = lat.Mortality();
@@ -51,14 +48,9 @@ public class FuelAutoAction implements AutoAction
 	@Override
 	public boolean resolve()
 	{
-		if(fuel < 1f)
-		{
-			fuel += rate;
-			fuel = Floats.clamp(fuel, 0f, 1f);
-			tile.setFuel(fuel);
-			return true;
-		}
-		
+		fuel += rate;
+		fuel = Floats.clamp(fuel, 0f, 1f);
+		tile.setFuel(fuel);
 		if(mrt != null)
 		{
 			tile.setMortality(mrt);

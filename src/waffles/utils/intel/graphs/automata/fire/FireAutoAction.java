@@ -2,8 +2,6 @@ package waffles.utils.intel.graphs.automata.fire;
 
 import waffles.utils.geom.utilities.constants.Cardinal2D;
 import waffles.utils.intel.graphs.automata.AutoAction;
-import waffles.utils.intel.graphs.automata.life.LifeAutoLayout;
-import waffles.utils.intel.graphs.automata.life.LifeAutoTile;
 import waffles.utils.intel.utilities.Mortality;
 import waffles.utils.tools.Randomizer;
 import waffles.utils.tools.primitives.Floats;
@@ -21,23 +19,25 @@ import waffles.utils.tools.primitives.Floats;
 public class FireAutoAction implements AutoAction
 {
 	private Mortality mrt;
-	private FireAutoTile tile;
-	private float fuel, spread;
 	private Randomizer rng;
+	private FireAutoTile tile;
+	private float fuel, rate;
+	private float spread;
 	
 	/**
-	 * Creates a new {@code LifeAutoAction}.
+	 * Creates a new {@code FireAutoAction}.
 	 * 
 	 * @param lyt  an automaton layout
 	 * @param lat  an automaton tile
 	 * 
 	 * 
-	 * @see LifeAutoLayout
-	 * @see LifeAutoTile
+	 * @see FireAutoLayout
+	 * @see FireAutoTile
 	 */
 	public FireAutoAction(FireAutoLayout<?> lyt, FireAutoTile lat)
 	{
 		rng = lyt.RNG();
+		rate = lyt.FireRate();
 		spread = lyt.SpreadChance();
 		mrt = lat.Mortality();
 		fuel = lat.Fuel();
@@ -91,7 +91,7 @@ public class FireAutoAction implements AutoAction
 		
 		if(mrt == Mortality.ALIVE)
 		{
-			fuel = fuel / count - 0.1f;
+			fuel = fuel / count - rate;
 			fuel = Floats.max(0f, fuel);
 			if(fuel <= 0f)
 			{

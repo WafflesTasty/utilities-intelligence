@@ -22,7 +22,16 @@ public interface AutoLayout<A extends AutoAction, T extends AutoTile>
 	 * @return      an automaton action
 	 */
 	public abstract A create(T tile);
-
+	
+	/**
+	 * Returns the automaton radius of the {@code AutoLayout}.
+	 * This determines the square radius of tiles that
+	 * get updated whenever a tile updates.
+	 * 
+	 * @return  a tile radius
+	 */
+	public abstract int AutoRadius();
+	
 	/**
 	 * Returns the beat time of the {@code AutoLayout}.
 	 * 

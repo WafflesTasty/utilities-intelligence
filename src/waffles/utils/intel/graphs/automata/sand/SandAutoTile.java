@@ -65,10 +65,4 @@ public interface SandAutoTile extends AutoTile, Tiled2D
 	{
 		return (SandAutoTile) Tiled2D.super.Neighbor(c);
 	}
-	
-	@Override
-	public default int AutoRadius()
-	{
-		return 1;
-	}
 }

@@ -14,12 +14,5 @@ import waffles.utils.tools.patterns.semantics.Coordinated;
  */
 public interface AutoTile extends Coordinated
 {
-	/**
-	 * Returns the radius of the {@code AutoTile}.
-	 * This determines the radius of tiles that get
-	 * updated whenever this tile updates.
-	 * 
-	 * @return  an automaton radius
-	 */
-	public abstract int AutoRadius();
+	// NOT APPLICABLE
 }

@@ -44,10 +44,4 @@ public interface LifeAutoTile extends AutoTile, Tiled2D
 	{
 		return (LifeAutoTile) Tiled2D.super.Neighbor(c);
 	}
-	
-	@Override
-	public default int AutoRadius()
-	{
-		return 1;
-	}
 }

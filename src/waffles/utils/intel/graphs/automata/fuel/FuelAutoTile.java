@@ -1,4 +1,4 @@
-package waffles.utils.intel.graphs.automata.fire;
+package waffles.utils.intel.graphs.automata.fuel;
 
 import waffles.utils.geom.spaces.index.tiles.Tiled2D;
 import waffles.utils.geom.utilities.constants.Cardinal2D;
@@ -6,7 +6,7 @@ import waffles.utils.intel.graphs.automata.AutoTile;
 import waffles.utils.intel.utilities.Mortality;
 
 /**
- * A {@code FireAutoTile} defines a single {@code FireAutomaton} tile.
+ * A {@code FuelAutoTile} defines a single {@code FuelAutomaton} tile.
  *
  * @author Waffles
  * @since 10 May 2024
@@ -16,17 +16,17 @@ import waffles.utils.intel.utilities.Mortality;
  * @see AutoTile
  * @see Tiled2D
  */
-public interface FireAutoTile extends AutoTile, Tiled2D
+public interface FuelAutoTile extends AutoTile, Tiled2D
 {
 	/**
-	 * Returns the fuel of the {@code FireAutoTile}.
+	 * Returns the fuel of the {@code FuelAutoTile}.
 	 * 
 	 * @return  a tile fuel
 	 */
 	public abstract float Fuel();
 	
 	/**
-	 * Returns the mortality of the {@code FireAutoTile}.
+	 * Returns the mortality of the {@code FuelAutoTile}.
 	 * 
 	 * @return  a mortality state
 	 * 
@@ -36,7 +36,7 @@ public interface FireAutoTile extends AutoTile, Tiled2D
 	public abstract Mortality Mortality();
 	
 	/**
-	 * Changes the mortality of the {@code FireAutoTile}.
+	 * Changes the mortality of the {@code FuelAutoTile}.
 	 * 
 	 * @param mrt  a mortality state
 	 * 
@@ -46,7 +46,7 @@ public interface FireAutoTile extends AutoTile, Tiled2D
 	public abstract void setMortality(Mortality mrt);
 	
 	/**
-	 * Changes the fuel of the {@code FireAutoTile}.
+	 * Changes the fuel of the {@code FuelAutoTile}.
 	 * 
 	 * @param fuel  a tile fuel
 	 */
@@ -54,8 +54,8 @@ public interface FireAutoTile extends AutoTile, Tiled2D
 	
 	
 	@Override
-	public default FireAutoTile Neighbor(Cardinal2D c)
+	public default FuelAutoTile Neighbor(Cardinal2D c)
 	{
-		return (FireAutoTile) Tiled2D.super.Neighbor(c);
+		return (FuelAutoTile) Tiled2D.super.Neighbor(c);
 	}
 }

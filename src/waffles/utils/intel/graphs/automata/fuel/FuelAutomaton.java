@@ -1,8 +1,6 @@
 package waffles.utils.intel.graphs.automata.fuel;
 
 import waffles.utils.intel.graphs.automata.Automaton;
-import waffles.utils.intel.graphs.automata.fire.FireAutoAction;
-import waffles.utils.intel.graphs.automata.fire.FireAutoTile;
 
 /**
  * A {@code FuelAutomaton} gradually refuels tiles at a constant rate.
@@ -13,11 +11,11 @@ import waffles.utils.intel.graphs.automata.fire.FireAutoTile;
  *
  * 
  * @param <T>  a tile type
- * @see FireAutoAction
- * @see FireAutoTile
+ * @see FuelAutoAction
+ * @see FuelAutoTile
  * @see Automaton
  */
-public class FuelAutomaton<T extends FireAutoTile> extends Automaton<FuelAutoAction, T>
+public class FuelAutomaton<T extends FuelAutoTile> extends Automaton<FuelAutoAction, T>
 {
 	/**
 	 * Creates a new {@code FuelAutomaton}.

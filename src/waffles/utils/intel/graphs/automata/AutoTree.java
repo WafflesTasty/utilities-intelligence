@@ -77,7 +77,7 @@ public class AutoTree<A extends AutoAction> extends ChristmasTree<A>
 	 */
 	public void enable(AutoTile tile)
 	{
-		int rad = tile.AutoRadius();
+		int rad = parent.AutoRadius();
 		int[] crd = tile.Coordinates();
 		
 		int[] min = new int[crd.length];

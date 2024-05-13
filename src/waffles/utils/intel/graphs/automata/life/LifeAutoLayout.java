@@ -36,4 +36,10 @@ public interface LifeAutoLayout<T extends LifeAutoTile> extends AutoLayout<LifeA
 	{
 		return new LifeAutoAction(this, tile);
 	}
+	
+	@Override
+	public default int AutoRadius()
+	{
+		return 1;
+	}
 }
