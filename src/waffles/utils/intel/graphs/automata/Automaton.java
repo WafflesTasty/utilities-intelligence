@@ -13,18 +13,17 @@ import waffles.utils.sets.indexed.IndexedSet;
  * @version 1.1
  *
  * 
- * @param <A> an action type
  * @param <T> a tile type
  * @see IndexedSet
  * @see PulseEvent
- * @see AutoAction
  * @see AutoTile
  */
-public class Automaton<A extends AutoAction, T extends AutoTile> extends PulseEvent implements IndexedSet<A>
+public class Automaton<T extends AutoTile> extends PulseEvent implements IndexedSet<AutoAction>
 {
+	private AutoLayout<T> layout;
 	private IndexedSet<T> target;
-	private AutoLayout<A, T> layout;
-	private AutoTree<A> action, buffer;
+	
+	private AutoTree action, buffer;
 	
 	/**
 	 * Creates a new {@code Automaton}.
@@ -34,7 +33,7 @@ public class Automaton<A extends AutoAction, T extends AutoTile> extends PulseEv
 	 * 
 	 * @see AutoLayout
 	 */
-	public Automaton(AutoLayout<A, T> lyt)
+	public Automaton(AutoLayout<T> lyt)
 	{
 		super(lyt.Beat());
 		layout = lyt;
@@ -50,7 +49,7 @@ public class Automaton<A extends AutoAction, T extends AutoTile> extends PulseEv
 	 */
 	public void setIndex(IndexedSet<T> tgt)
 	{
-		action = new AutoTree<>(this, tgt);
+		action = new AutoTree(this, tgt);
 		target = tgt;
 	}
 	
@@ -74,7 +73,7 @@ public class Automaton<A extends AutoAction, T extends AutoTile> extends PulseEv
 	 * 
 	 * @see AutoAction
 	 */
-	public A create(int... crd)
+	public AutoAction create(int... crd)
 	{
 		T tile = target.get(crd);
 		return layout.create(tile);
@@ -100,7 +99,7 @@ public class Automaton<A extends AutoAction, T extends AutoTile> extends PulseEv
 	
 		
 	@Override
-	public A get(int... coords)
+	public AutoAction get(int... coords)
 	{
 		return action.get(coords);
 	}
@@ -115,7 +114,7 @@ public class Automaton<A extends AutoAction, T extends AutoTile> extends PulseEv
 		
 
 		buffer = action;
-		action = new AutoTree<>(this, target);
+		action = new AutoTree(this, target);
 		for(AutoAction act : buffer.VisibleObjects())
 		{
 			if(act.resolve())

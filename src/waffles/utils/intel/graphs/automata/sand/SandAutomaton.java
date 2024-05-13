@@ -13,11 +13,10 @@ import waffles.utils.intel.graphs.automata.Automaton;
  *
  *
  * @param <T>  a tile type
- * @see SandAutoAction
  * @see SandAutoTile
  * @see Automaton
  */
-public class SandAutomaton<T extends SandAutoTile> extends Automaton<SandAutoAction, T>
+public class SandAutomaton<T extends SandAutoTile> extends Automaton<T>
 {
 	/**
 	 * Creates a new {@code SandAutomaton}.
@@ -40,6 +39,6 @@ public class SandAutomaton<T extends SandAutoTile> extends Automaton<SandAutoAct
 	 */
 	public SandAutomaton(long beat)
 	{
-		this(new SandAutoLayout<>(beat));
+		this(() -> beat);
 	}
 }

@@ -8,20 +8,21 @@ package waffles.utils.intel.graphs.automata;
  * @version 1.1
  *
  *
- * @param <A>  an action type
  * @param <T>  a tile type
- * @see AutoAction
  * @see AutoTile
  */
-public interface AutoLayout<A extends AutoAction, T extends AutoTile>
+public interface AutoLayout<T extends AutoTile>
 {			
 	/**
 	 * Creates a new action from the {@code AutoLayout}.
 	 * 
 	 * @param tile  an automaton tile
 	 * @return      an automaton action
+	 * 
+	 * 
+	 * @see AutoAction
 	 */
-	public abstract A create(T tile);
+	public abstract AutoAction create(T tile);
 	
 	/**
 	 * Returns the automaton radius of the {@code AutoLayout}.

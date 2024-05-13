@@ -12,11 +12,10 @@ import waffles.utils.intel.utilities.Mortality;
  * 
  * 
  * @param <T>  a tile type
- * @see LifeAutoAction
  * @see LifeAutoTile
  * @see AutoLayout
  */
-public interface LifeAutoLayout<T extends LifeAutoTile> extends AutoLayout<LifeAutoAction, T>
+public interface LifeAutoLayout<T extends LifeAutoTile> extends AutoLayout<T>
 {	
 	/**
 	 * Creates a {@code LifeAutoBound} for a given {@code Mortality}.

@@ -16,11 +16,10 @@ import waffles.utils.intel.graphs.automata.life.layout.ConwayLayout;
  *
  * 
  * @param <T>  a tile type
- * @see LifeAutoAction
  * @see LifeAutoTile
  * @see Automaton
  */
-public class LifeAutomaton<T extends LifeAutoTile> extends Automaton<LifeAutoAction, T>
+public class LifeAutomaton<T extends LifeAutoTile> extends Automaton<T>
 {
 	/**
 	 * Creates a new {@code LifeAutomaton}.

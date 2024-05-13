@@ -11,11 +11,10 @@ import waffles.utils.intel.graphs.automata.Automaton;
  *
  * 
  * @param <T>  a tile type
- * @see FuelAutoAction
  * @see FuelAutoTile
  * @see Automaton
  */
-public class FuelAutomaton<T extends FuelAutoTile> extends Automaton<FuelAutoAction, T>
+public class FuelAutomaton<T extends FuelAutoTile> extends Automaton<T>
 {
 	/**
 	 * Creates a new {@code FuelAutomaton}.

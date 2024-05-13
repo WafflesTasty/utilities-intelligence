@@ -14,13 +14,12 @@ import waffles.utils.sets.utilities.iterators.IndexKeys;
  * @version 1.1
  * 
  * 
- * @param <A>  an action type
  * @see ChristmasTree
  * @see AutoAction
  */
-public class AutoTree<A extends AutoAction> extends ChristmasTree<A>
+public class AutoTree extends ChristmasTree<AutoAction>
 {
-	private Automaton<A, ?> parent;
+	private Automaton<?> parent;
 	
 	/**
 	 * Creates a new {@code AutoTree}.
@@ -32,7 +31,7 @@ public class AutoTree<A extends AutoAction> extends ChristmasTree<A>
 	 * @see IndexedSet
 	 * @see Automaton
 	 */
-	public AutoTree(Automaton<A, ?> atm, IndexedSet<?> tgt)
+	public AutoTree(Automaton<?> atm, IndexedSet<?> tgt)
 	{
 		super(tgt.Dimensions());
 		parent = atm;

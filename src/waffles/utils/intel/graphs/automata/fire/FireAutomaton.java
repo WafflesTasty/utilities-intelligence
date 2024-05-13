@@ -14,11 +14,10 @@ import waffles.utils.intel.graphs.automata.Automaton;
  *
  * 
  * @param <T>  a tile type
- * @see FireAutoAction
  * @see FireAutoTile
  * @see Automaton
  */
-public class FireAutomaton<T extends FireAutoTile> extends Automaton<FireAutoAction, T>
+public class FireAutomaton<T extends FireAutoTile> extends Automaton<T>
 {
 	/**
 	 * Creates a new {@code FireAutomaton}.

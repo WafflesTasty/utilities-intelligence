@@ -17,7 +17,7 @@ import waffles.utils.intel.utilities.Vacancy;
  */
 public class SandAutoAction implements AutoAction
 {
-	private Cardinal2D[] dir;
+	private Cardinal2D[] dirs;
 	private SandAutoTile src, tgt;
 
 	/**
@@ -32,7 +32,8 @@ public class SandAutoAction implements AutoAction
 	 */
 	public SandAutoAction(SandAutoLayout<?> lyt, SandAutoTile sat)
 	{
-		dir = lyt.Target();
+		SandAutoGravity grv = lyt.Gravity();
+		dirs = grv.Value(lyt.Direction());
 		src = sat;
 	}
 
@@ -66,9 +67,9 @@ public class SandAutoAction implements AutoAction
 	{
 		if(src.Mortality() != Mortality.DEAD)
 		{
-			for(Cardinal2D c : dir)
+			for(Cardinal2D d : dirs)
 			{
-				SandAutoTile n = src.Neighbor(c);
+				SandAutoTile n = src.Neighbor(d);
 				if(n != null)
 				{
 					if(n.Mortality() != Mortality.ALIVE

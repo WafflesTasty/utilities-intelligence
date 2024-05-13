@@ -17,7 +17,7 @@ import waffles.utils.tools.Randomizer;
  * @see AutoLayout
  */
 @FunctionalInterface
-public interface FireAutoLayout<T extends FireAutoTile> extends AutoLayout<FireAutoAction, T>
+public interface FireAutoLayout<T extends FireAutoTile> extends AutoLayout<T>
 {	
 	/**
 	 * Returns the rng of the {@code FireAutoLayout}.

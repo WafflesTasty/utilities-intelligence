@@ -11,12 +11,11 @@ import waffles.utils.intel.graphs.automata.AutoLayout;
  * 
  * 
  * @param <T>  a tile type
- * @see FuelAutoAction
  * @see FuelAutoTile
  * @see AutoLayout
  */
 @FunctionalInterface
-public interface FuelAutoLayout<T extends FuelAutoTile> extends AutoLayout<FuelAutoAction, T>
+public interface FuelAutoLayout<T extends FuelAutoTile> extends AutoLayout<T>
 {	
 	/**
 	 * Returns the fuel rate of the {@code FuelAutoLayout}.
