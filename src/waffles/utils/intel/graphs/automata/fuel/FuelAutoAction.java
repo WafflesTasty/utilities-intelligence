@@ -48,23 +48,27 @@ public class FuelAutoAction implements AutoAction
 	@Override
 	public boolean resolve()
 	{
-		fuel += rate;
-		fuel = Floats.clamp(fuel, 0f, 1f);
 		tile.setFuel(fuel);
-		if(mrt != null)
-		{
-			tile.setMortality(mrt);
-		}
-		
-		return false;
+		tile.setMortality(mrt);
+		return fuel < 1f;
 	}
 	
 	@Override
 	public void compute()
 	{
-		if(mrt == Mortality.UNDEAD)
+		if(fuel < 0.5f)
+		{
 			mrt = Mortality.DEAD;
+			fuel = 1f;
+		}
 		else
-			mrt = null;
+		{
+			fuel += rate;
+			fuel = Floats.clamp(fuel, 0f, 1f);
+			if(mrt == Mortality.UNDEAD)
+			{
+				mrt = Mortality.ALIVE;
+			}
+		}
 	}
 }

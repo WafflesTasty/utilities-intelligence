@@ -39,7 +39,7 @@ public interface FireAutoLayout<T extends FireAutoTile> extends AutoLayout<FireA
 	 */
 	public default float FireRate()
 	{
-		return 0.25f;
+		return 0.10f;
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public interface FireAutoLayout<T extends FireAutoTile> extends AutoLayout<FireA
 	 */
 	public default float SpreadChance()
 	{
-		return 0.5f;
+		return 0.33f;
 	}
 	
 	@Override
