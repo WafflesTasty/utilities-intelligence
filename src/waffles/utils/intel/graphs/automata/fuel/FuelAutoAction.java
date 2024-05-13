@@ -16,7 +16,7 @@ import waffles.utils.tools.primitives.Floats;
  */
 public class FuelAutoAction implements AutoAction
 {
-	private Mortality mrt;
+	private Mortality mort;
 	private float fuel, rate;
 	private FuelAutoTile tile;
 	
@@ -33,7 +33,7 @@ public class FuelAutoAction implements AutoAction
 	public FuelAutoAction(FuelAutoLayout<?> lyt, FuelAutoTile lat)
 	{
 		rate = lyt.FuelRate();
-		mrt = lat.Mortality();
+		mort = lat.Mortality();
 		fuel = lat.Fuel();
 		tile = lat;
 	}
@@ -49,26 +49,18 @@ public class FuelAutoAction implements AutoAction
 	public boolean resolve()
 	{
 		tile.setFuel(fuel);
-		tile.setMortality(mrt);
+		tile.setMortality(mort);
 		return fuel < 1f;
 	}
 	
 	@Override
 	public void compute()
 	{
-		if(fuel < 0.5f)
+		fuel += rate;
+		fuel = Floats.clamp(fuel, 0f, 1f);
+		if(mort == Mortality.UNDEAD)
 		{
-			mrt = Mortality.DEAD;
-			fuel = 1f;
-		}
-		else
-		{
-			fuel += rate;
-			fuel = Floats.clamp(fuel, 0f, 1f);
-			if(mrt == Mortality.UNDEAD)
-			{
-				mrt = Mortality.ALIVE;
-			}
+			mort = Mortality.DEAD;
 		}
 	}
 }

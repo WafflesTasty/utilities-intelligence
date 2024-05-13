@@ -24,7 +24,7 @@ public interface FuelAutoLayout<T extends FuelAutoTile> extends AutoLayout<T>
 	 */
 	public default float FuelRate()
 	{
-		return 0.02f;
+		return 0.1f;
 	}
 	
 	

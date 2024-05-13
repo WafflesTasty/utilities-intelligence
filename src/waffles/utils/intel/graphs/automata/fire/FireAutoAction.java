@@ -62,41 +62,50 @@ public class FireAutoAction implements AutoAction
 	@Override
 	public void compute()
 	{
-		if(mrt == Mortality.UNDEAD)
+		switch(mrt)
 		{
-			fuel = 0f;
-			return;
-		}
-		
-		int count = 1;
-		for(Cardinal2D c : Cardinal2D.All())
+		case ALIVE:
 		{
-			if(c == Cardinal2D.CENTER)
-				continue;
-			
-			FireAutoTile n = tile.Neighbor(c);
-			if(n != null)
-			{
-				if(n.Mortality() == Mortality.ALIVE)
-				{
-					if(rng.randomFloat() < spread)
-					{
-						mrt = Mortality.ALIVE;
-						fuel += n.Fuel();
-						count++;
-					}
-				}
-			}
-		}
-		
-		if(mrt == Mortality.ALIVE)
-		{
-			fuel = fuel / count - rate;
-			fuel = Floats.max(0f, fuel);
-			if(fuel <= 0f)
+			fuel = Floats.clamp(fuel - rate, 0f, 1f);
+			if(fuel == 0f)
 			{
 				mrt = Mortality.UNDEAD;
 			}
+		}
+		case DEAD:
+		{
+			int count = 1;
+			float sum = fuel;
+			for(Cardinal2D c : Cardinal2D.All())
+			{
+				if(c == Cardinal2D.CENTER)
+					continue;
+				
+				FireAutoTile n = tile.Neighbor(c);
+				if(n != null)
+				{
+					if(n.Mortality() == Mortality.ALIVE)
+					{
+						if(rng.randomFloat() < spread / count)
+						{
+							sum += n.Fuel();
+							count++;
+						}
+					}
+				}
+			}
+			
+			if(count > 1)
+			{
+				mrt = Mortality.ALIVE;
+				fuel = sum / count;
+			}
+			
+			break;
+		}
+		case UNDEAD:
+		default:
+			break;
 		}
 	}
 }
