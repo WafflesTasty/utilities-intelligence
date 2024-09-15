@@ -1,6 +1,6 @@
 package waffles.utils.intel.graphs.auto;
 
-import waffles.utils.tools.patterns.semantics.Coordinated;
+import waffles.utils.sets.utilities.coordinates.Coordinated;
 
 /**
  * An {@code AutoAction} defines the local behavior of an {@code Automaton}.
