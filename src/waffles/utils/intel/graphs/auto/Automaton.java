@@ -1,6 +1,6 @@
 package waffles.utils.intel.graphs.auto;
 
-import waffles.utils.phys.utilities.events.PulseEvent;
+import waffles.utils.phys.utilities.events.pulsed.PulseEvent;
 import waffles.utils.sets.indexed.IndexedSet;
 
 /**
@@ -54,17 +54,6 @@ public class Automaton<T extends AutoTile> extends PulseEvent implements Indexed
 	}
 	
 	/**
-	 * Enables a coordinate in the {@code Automaton}.
-	 * 
-	 * @param crd  an index coordinate
-	 */
-	public void enable(int... crd)
-	{
-		T tile = target.get(crd);
-		action.enable(tile);
-	}
-
-	/**
 	 * Creates an action for the {@code Automaton}.
 	 * 
 	 * @param crd  an index coordinate
@@ -78,6 +67,17 @@ public class Automaton<T extends AutoTile> extends PulseEvent implements Indexed
 		T tile = target.get(crd);
 		return layout.create(tile);
 	}
+	
+	/**
+	 * Enables a coordinate in the {@code Automaton}.
+	 * 
+	 * @param crd  an index coordinate
+	 */
+	public void enable(int... crd)
+	{
+		T tile = target.get(crd);
+		action.enable(tile);
+	}	
 	
 	/**
 	 * Returns the radius of the {@code Automaton}.

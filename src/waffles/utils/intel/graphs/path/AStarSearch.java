@@ -2,7 +2,7 @@ package waffles.utils.intel.graphs.path;
 
 import waffles.utils.intel.graphs.Path;
 import waffles.utils.intel.utilities.cost.Heuristic;
-import waffles.utils.phys.utilities.events.SteppedEvent;
+import waffles.utils.phys.utilities.events.stepped.SteppedEvent;
 
 /**
  * The {@code AStarSearch} algorithm computes an optimal path between connected objects.
@@ -69,7 +69,7 @@ public class AStarSearch<O> extends SteppedEvent
 	{
 		return path;
 	}
-	
+
 
 	@Override
 	public void onPulse(long beat)
