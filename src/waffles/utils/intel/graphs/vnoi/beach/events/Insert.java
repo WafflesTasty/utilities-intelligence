@@ -102,7 +102,7 @@ public class Insert extends Event
 			b.checkDelete(rWed.RHead());
 			
 			// Add a new vertex.
-			v.add(wOld.Origin());
+			v.addVertex(wOld.Origin());
 			return;
 		}		
 		

@@ -75,17 +75,7 @@ public class Voronoi<P extends Positioned2D> extends Tree implements SteppableEv
 		beach = new Beach<>(this);
 		layout = lyt;
 	}
-	
-	public void add(Vector2 p)
-	{
-		pts.add(p);
-	}
-	
-	public Iterable<Vector2> Points()
-	{
-		return pts;
-	}
-	
+		
 	
 	/**
 	 * Loads the {@code Voronoi} tree with positions.
@@ -120,6 +110,33 @@ public class Voronoi<P extends Positioned2D> extends Tree implements SteppableEv
 			Insert evt = new Insert(h, e);
 			beach.add(evt);
 		}
+	}
+	
+	/**
+	 * Fixes a vertex into the {@code Voronoi} tree.
+	 * 
+	 * @param p  a vertex point
+	 * 
+	 * 
+	 * @see Vector2
+	 */
+	public void addVertex(Vector2 p)
+	{
+		pts.add(p);
+	}
+
+	/**
+	 * Returns the vertices of the {@code Voronoi} tree.
+	 * 
+	 * @return  a vertex iterable
+	 * 
+	 * 
+	 * @see Iterable
+	 * @see Vector2
+	 */
+	public Iterable<Vector2> Points()
+	{
+		return pts;
 	}
 	
 	/**

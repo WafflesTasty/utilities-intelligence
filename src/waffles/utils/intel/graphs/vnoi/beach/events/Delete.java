@@ -170,7 +170,7 @@ public class Delete extends Event
 			b.checkDelete(mWed.RHead());
 
 			// Add a new vertex.
-			v.add(mWed.Origin());
+			v.addVertex(mWed.Origin());
 			return;
 		}
 
@@ -183,7 +183,7 @@ public class Delete extends Event
 		b.checkDelete(mWed.RHead());
 		
 		// Add a new vertex.
-		v.add(mWed.Origin());
+		v.addVertex(mWed.Origin());
 	}
 
 	@Override
