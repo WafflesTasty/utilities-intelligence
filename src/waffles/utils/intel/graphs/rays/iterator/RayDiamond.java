@@ -104,10 +104,7 @@ public class RayDiamond implements Partition, Iterator<int[]>
 			Cuts.Below(max)
 		);
 		
-//		if(!isActive)
-//		{
-			computeLast();
-//		}
+		computeLast();
 	}
 	
 	/**
@@ -140,88 +137,7 @@ public class RayDiamond implements Partition, Iterator<int[]>
 		return rad;
 	}
 
-	
-//	private int mindex()
-//	{
-//		float hpi = Floats.PI / 2;
-//		
-//		
-//		int k = 1;
-//		Cut min = cone.Minimum();
-//		while(!min.isBelow(-hpi))
-//		{
-//			min = min.minus(hpi);
-//			k++;
-//		}
-//		
-////		float pi = Floats.PI;
-////		int k = Integers.ceil(2 * (pi + a) / pi);
-////		System.out.print("a(" + a + "), r(" + r + ") -> ");
-//		float tan = Floats.tan(min.value());
-//		float y = k - 1f / (Floats.abs(tan) + 1f);
-////		System.out.print("k = " + k + ", tan = " + tan + ", y = " + y + " -> ");
-////		System.out.println(Integers.round(y * r) + ".");
-//		return Integers.ceil(y * rad - rTgt);
-//	}
-	
-//	private int index(float a, int r)
-//	{
-//		int k = 1;
-//		float ang = a;
-//		while(ang >= -Floats.PI / 2)
-//		{
-//			ang -= Floats.PI / 2;
-//			k++;
-//		}
-//		
-////		float pi = Floats.PI;
-////		int k = Integers.ceil(2 * (pi + a) / pi);
-////		System.out.print("a(" + a + "), r(" + r + ") -> ");
-//		float tan = Floats.abs(Floats.tan(a));
-//		float y = k - 1f / (tan + 1f);
-////		System.out.print("k = " + k + ", tan = " + tan + ", y = " + y + " -> ");
-////		System.out.println(Integers.round(y * r) + ".");
-//		return Integers.round(y * r);
-//	}
-	
-//	private int index(float a, int r)
-//	{
-//		int k = 1;
-//		float ang = a;
-//		while(ang >= -Floats.PI / 2)
-//		{
-//			ang -= Floats.PI / 2;
-//			k++;
-//		}
-//
-////		float pi = Floats.PI;
-////		int k = Integers.ceil(2 * (pi + a) / pi);
-////		System.out.print("a(" + a + "), r(" + r + ") -> ");
-//		float tan = Floats.abs(Floats.tan(a));
-//		float y = k - 1f / (tan + 1f);
-////		System.out.print("k = " + k + ", tan = " + tan + ", y = " + y + " -> ");
-////		System.out.println(Integers.round(y * r) + ".");
-//		return Integers.round(y * r);
-//	}
-	
-	private int X(int i, int r)
-	{
-		return r - Integers.abs(2 * r - i);
-	}
-	
-	private int Y(int i, int r)
-	{
-		int j = Integers.mod(i - r, 4 * r);
-		return X(j, r);
-	}	
 
-	
-	@Override
-	public String toString()
-	{
-		return "Cone [" + Minimum() + ", " + Maximum() + ", " + Diagonal() + "]";
-	}
-	
 	@Override
 	public int compareTo(float val)
 	{
@@ -243,9 +159,8 @@ public class RayDiamond implements Partition, Iterator<int[]>
 			X(iNext, rad),
 			Y(iNext, rad)
 		};
-		
-		System.out.println("Next: " + iNext + " (" + X(iNext, rad) + ", " + Y(iNext, rad) + ").");
-		
+
+
 		iNext++;
 		// If the index is outside bounds...
 		if(iNext <= 0 || iLast < iNext)
@@ -253,7 +168,7 @@ public class RayDiamond implements Partition, Iterator<int[]>
 			// ...increase the radius.
 			
 			rad++;
-			System.out.println("Increasing radius to " + rad + ".");
+
 			computeNext();
 			computeLast();
 		}
@@ -262,6 +177,18 @@ public class RayDiamond implements Partition, Iterator<int[]>
 		return curr;
 	}
 
+	
+	private int X(int i, int r)
+	{
+		return r - Integers.abs(2 * r - i);
+	}
+	
+	private int Y(int i, int r)
+	{
+		int j = Integers.mod(i - r, 4 * r);
+		return X(j, r);
+	}
+	
 	private void computeNext()
 	{
 		int k = 0;
@@ -290,8 +217,6 @@ public class RayDiamond implements Partition, Iterator<int[]>
 			iNext = k * rad - yTop + 1;
 		else
 			iNext = k * rad - yTop;
-		
-		System.out.println("Next Tile: " + iNext + " (" + (Minimum() / Floats.PI) + " Pi).");
 	}
 
 	private void computeLast()
@@ -322,7 +247,5 @@ public class RayDiamond implements Partition, Iterator<int[]>
 			iLast = k * rad - yBot - 1;
 		else
 			iLast = k * rad - yBot;
-
-		System.out.println("Last Tile: " + iLast + " (" + (Maximum() / Floats.PI) + " Pi).");
 	}
 }

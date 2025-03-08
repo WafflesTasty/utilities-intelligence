@@ -60,21 +60,16 @@ public class RayIterator<T extends Tiled2D> implements Iterator<T>
 		// If no cones are left...
 		if(cones.isEmpty())
 		{
-			System.out.println("All cones processed.");
-			System.out.println();
 			// Finish iterating.
 			return null;
 		}
 		
 		// Find the next diamond.
 		dmd = cones.peek();
-		System.out.println(dmd + ":");
 		
 		// If it exceeds the max diagonal...
 		if(src.Diagonal() < dmd.Diagonal())
 		{
-			System.out.println("The cone exceeds maximum diagonal.");
-			
 			// ...remove it, and
 			cones.pop();
 			// find the next tile.
@@ -95,7 +90,6 @@ public class RayIterator<T extends Tiled2D> implements Iterator<T>
 		// If no tile was found...
 		if(next == null)
 		{
-			System.out.println("The tile was not found.");
 			// ...find the next tile.
 			return findNext();
 		}
@@ -103,30 +97,22 @@ public class RayIterator<T extends Tiled2D> implements Iterator<T>
 		// If the tile blocks rays...
 		if(src.blocksRay(next))
 		{
-			System.out.println("The tile blocks rays.");
-
 			float rSrc = src.SourceRadius();
 			float rTgt = src.TargetRadius();
-			
-			System.out.println("Source Radius: " + rSrc);
-			System.out.println("Target Radius: " + rTgt);
-			
+
 			float norm = Floats.sqrt(crds[0] * crds[0] + crds[1] * crds[1]);
 			float asin = Floats.asin((rSrc + rTgt) / norm);
 			float atan = Floats.atan2(crds[0], crds[1]);
 
-			System.out.println("Tile Norm: " + norm);
-			
+
 			float dMin = dmd.Minimum();
 			float dMax = dmd.Maximum();
 			int dRad = dmd.Diagonal();
 			
 			float aMin = atan - asin;
 			float aMax = atan + asin;
-			
-			System.out.println("Minimum Angle: " + (aMin / Floats.PI) + " Pi");
-			System.out.println("Maximum Angle: " + (aMax / Floats.PI) + " Pi");
-			
+
+
 			// If the diamond is above the minimum...
 			if(dmd.isAbove(aMin))
 			{
