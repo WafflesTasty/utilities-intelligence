@@ -38,15 +38,32 @@ public interface RayCaster<T extends Tiled2D> extends Iterable<T>
 	 */
 	public abstract int Diagonal();	
 	
+	
 	/**
-	 * Returns the ray index of the {@code RayCaster}.
+	 * Returns the source radius of the {@code RayCaster}.
+	 * This can be any value in the range of [0.0, 1.0], and
+	 * defines the radius of the circle within the source
+	 * tile from which rays will be cast.
 	 * 
-	 * @return  a raycaster index
-	 * 
-	 * 
-	 * @see RayIndex
+	 * @return  a source radius
 	 */
-	public abstract RayIndex RayIndex();
+	public default float SourceRadius()
+	{
+		return 0f;
+	}
+
+	/**
+	 * Returns the target radius of the {@code RayCaster}.
+	 * This can be any value in the range of [0.0, 1.0], and
+	 * defines the radius of the circle within the target
+	 * tile towards which rays will be cast.
+	 * 
+	 * @return  a target radius
+	 */
+	public default float TargetRadius()
+	{
+		return 0.5f;
+	}
 	
 	/**
 	 * Checks if a tile blocks the {@code RayCaster}.

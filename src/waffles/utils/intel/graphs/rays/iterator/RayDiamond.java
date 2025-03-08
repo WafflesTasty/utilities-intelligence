@@ -3,7 +3,6 @@ package waffles.utils.intel.graphs.rays.iterator;
 import java.util.Iterator;
 
 import waffles.utils.algebra.Partition;
-import waffles.utils.algebra.elements.interval.Cut;
 import waffles.utils.algebra.elements.interval.Cuts;
 import waffles.utils.algebra.elements.interval.Interval;
 import waffles.utils.algebra.elements.interval.Intervals;
@@ -13,9 +12,9 @@ import waffles.utils.tools.primitives.Integers;
 
 /**
  * A {@code RayDiamond} iterates over a single diamond in a {@code RayIterator}.
- * Each cone is iterated in a diamond pattern, starting from the tile at the
- * low angle of the cone and moving towards the high angle. Once the high angle
- * is reached, the radius of the diamond is increased and iteration begins again.
+ * Each cone is iterated in a diamond pattern, starting from the tile at the low
+ * angle of the cone and moving towards the high angle. Once the high angle is
+ * reached, the radius is increased and iteration begins again.
  *
  * @author Waffles
  * @since 07 Nov 2024
@@ -28,68 +27,87 @@ import waffles.utils.tools.primitives.Integers;
 public class RayDiamond implements Partition, Iterator<int[]>
 {
 	private int rad;
-	private Interval cone;
-	private int iNext, iMax;
+	private int iNext, iLast;
 	private float rSrc, rTgt;
+	private boolean isActive;
+	private Interval cone;
 	
 	/**
 	 * Creates a new {@code RayDiamond}.
 	 * 
-	 * @param min  a minimum angle
-	 * @param max  a maximum angle
+	 * @param c  a raycaster
+	 * 
+	 * 
+	 * @see RayCaster
 	 */
-	public RayDiamond(float min, float max)
+	public RayDiamond(RayCaster<?> c)
 	{
-		this(min, max, 1);
+		this(c, 1);
 	}
 
 	/**
 	 * Creates a new {@code RayCone}.
 	 * 
-	 * @param min  a minimum angle
-	 * @param max  a maximum angle
-	 * @param r  a diagonal radius
+	 * @param c  a raycaster
+	 * @param r  a radius
+	 * 
+	 * 
+	 * @see RayCaster
 	 */
-	public RayDiamond(float min, float max, int r)
-	{
+	public RayDiamond(RayCaster<?> c, int r)
+	{		
+		rSrc = c.SourceRadius();
+		rTgt = c.TargetRadius();
+		
+		iNext = 0; iLast = 4 * r;
+		cone = Intervals.RADIANS;
+		isActive = false;
 		rad = r;
-		setMinimum(min);
-		setMaximum(max);
 	}
 
 	
 	/**
-	 * Changes the minimum angle of the {@code RayCone}.
+	 * Changes the minimum angle of the {@code RayDiamond}.
 	 * 
 	 * @param min  a minimum angle
 	 */
 	public void setMinimum(float min)
 	{
-		iNext = index(min, rad);
+		if(min < Minimum())
+			return;
+		
 		cone = Intervals.create
 		(
 			Cuts.Below(min),
 			cone.Maximum()
 		);
 		
-		System.out.println("Minimum: " + iNext + " (" + Floats.tan(min) + ").");
+		if(!isActive)
+		{
+			computeNext();
+		}
 	}
 
 	/**
-	 * Changes the maximum angle of the {@code RayCone}.
+	 * Changes the maximum angle of the {@code RayDiamond}.
 	 * 
 	 * @param max  a maximum angle
 	 */
 	public void setMaximum(float max)
 	{
-		iMax = index(max, rad);
+		if(max > Maximum())
+			return;
+		
 		cone = Intervals.create
 		(
 			cone.Minimum(),
-			Cuts.Above(max)
+			Cuts.Below(max)
 		);
 		
-		System.out.println("Maximum: " + iMax + " (" + Floats.tan(max) + ").");
+//		if(!isActive)
+//		{
+			computeLast();
+//		}
 	}
 	
 	/**
@@ -99,8 +117,7 @@ public class RayDiamond implements Partition, Iterator<int[]>
 	 */
 	public float Minimum()
 	{
-		return aMin;
-//		return cone.Minimum();
+		return cone.Minimum().value();
 	}
 
 	/**
@@ -110,8 +127,7 @@ public class RayDiamond implements Partition, Iterator<int[]>
 	 */
 	public float Maximum()
 	{
-		return aMax;
-//		return cone.Maximum();
+		return cone.Maximum().value();
 	}
 	
 	/**
@@ -125,68 +141,68 @@ public class RayDiamond implements Partition, Iterator<int[]>
 	}
 
 	
-	private int mindex()
-	{
-		float hpi = Floats.PI / 2;
-		
-		
-		int k = 1;
-		Cut min = cone.Minimum();
-		while(!min.isBelow(-hpi))
-		{
-			min = min.minus(hpi);
-			k++;
-		}
-		
-//		float pi = Floats.PI;
-//		int k = Integers.ceil(2 * (pi + a) / pi);
-//		System.out.print("a(" + a + "), r(" + r + ") -> ");
-		float tan = Floats.tan(min.value());
-		float y = k - 1f / (Floats.abs(tan) + 1f);
-//		System.out.print("k = " + k + ", tan = " + tan + ", y = " + y + " -> ");
-//		System.out.println(Integers.round(y * r) + ".");
-		return Integers.ceil(y * rad - rTgt);
-	}
+//	private int mindex()
+//	{
+//		float hpi = Floats.PI / 2;
+//		
+//		
+//		int k = 1;
+//		Cut min = cone.Minimum();
+//		while(!min.isBelow(-hpi))
+//		{
+//			min = min.minus(hpi);
+//			k++;
+//		}
+//		
+////		float pi = Floats.PI;
+////		int k = Integers.ceil(2 * (pi + a) / pi);
+////		System.out.print("a(" + a + "), r(" + r + ") -> ");
+//		float tan = Floats.tan(min.value());
+//		float y = k - 1f / (Floats.abs(tan) + 1f);
+////		System.out.print("k = " + k + ", tan = " + tan + ", y = " + y + " -> ");
+////		System.out.println(Integers.round(y * r) + ".");
+//		return Integers.ceil(y * rad - rTgt);
+//	}
 	
-	private int index(float a, int r)
-	{
-		int k = 1;
-		float ang = a;
-		while(ang >= -Floats.PI / 2)
-		{
-			ang -= Floats.PI / 2;
-			k++;
-		}
-		
-//		float pi = Floats.PI;
-//		int k = Integers.ceil(2 * (pi + a) / pi);
-//		System.out.print("a(" + a + "), r(" + r + ") -> ");
-		float tan = Floats.abs(Floats.tan(a));
-		float y = k - 1f / (tan + 1f);
-//		System.out.print("k = " + k + ", tan = " + tan + ", y = " + y + " -> ");
-//		System.out.println(Integers.round(y * r) + ".");
-		return Integers.round(y * r);
-	}
+//	private int index(float a, int r)
+//	{
+//		int k = 1;
+//		float ang = a;
+//		while(ang >= -Floats.PI / 2)
+//		{
+//			ang -= Floats.PI / 2;
+//			k++;
+//		}
+//		
+////		float pi = Floats.PI;
+////		int k = Integers.ceil(2 * (pi + a) / pi);
+////		System.out.print("a(" + a + "), r(" + r + ") -> ");
+//		float tan = Floats.abs(Floats.tan(a));
+//		float y = k - 1f / (tan + 1f);
+////		System.out.print("k = " + k + ", tan = " + tan + ", y = " + y + " -> ");
+////		System.out.println(Integers.round(y * r) + ".");
+//		return Integers.round(y * r);
+//	}
 	
-	private int index(float a, int r)
-	{
-		int k = 1;
-		float ang = a;
-		while(ang >= -Floats.PI / 2)
-		{
-			ang -= Floats.PI / 2;
-			k++;
-		}
-		
-//		float pi = Floats.PI;
-//		int k = Integers.ceil(2 * (pi + a) / pi);
-//		System.out.print("a(" + a + "), r(" + r + ") -> ");
-		float tan = Floats.abs(Floats.tan(a));
-		float y = k - 1f / (tan + 1f);
-//		System.out.print("k = " + k + ", tan = " + tan + ", y = " + y + " -> ");
-//		System.out.println(Integers.round(y * r) + ".");
-		return Integers.round(y * r);
-	}
+//	private int index(float a, int r)
+//	{
+//		int k = 1;
+//		float ang = a;
+//		while(ang >= -Floats.PI / 2)
+//		{
+//			ang -= Floats.PI / 2;
+//			k++;
+//		}
+//
+////		float pi = Floats.PI;
+////		int k = Integers.ceil(2 * (pi + a) / pi);
+////		System.out.print("a(" + a + "), r(" + r + ") -> ");
+//		float tan = Floats.abs(Floats.tan(a));
+//		float y = k - 1f / (tan + 1f);
+////		System.out.print("k = " + k + ", tan = " + tan + ", y = " + y + " -> ");
+////		System.out.println(Integers.round(y * r) + ".");
+//		return Integers.round(y * r);
+//	}
 	
 	private int X(int i, int r)
 	{
@@ -201,6 +217,12 @@ public class RayDiamond implements Partition, Iterator<int[]>
 
 	
 	@Override
+	public String toString()
+	{
+		return "Cone [" + Minimum() + ", " + Maximum() + ", " + Diagonal() + "]";
+	}
+	
+	@Override
 	public int compareTo(float val)
 	{
 		float ang = Floats.normrad(val);
@@ -212,7 +234,7 @@ public class RayDiamond implements Partition, Iterator<int[]>
 	{
 		return true;
 	}
-
+	
 	@Override
 	public int[] next()
 	{
@@ -221,19 +243,86 @@ public class RayDiamond implements Partition, Iterator<int[]>
 			X(iNext, rad),
 			Y(iNext, rad)
 		};
+		
 		System.out.println("Next: " + iNext + " (" + X(iNext, rad) + ", " + Y(iNext, rad) + ").");
 		
 		iNext++;
 		// If the index is outside bounds...
-		if(iNext <= 0 || iMax <= iNext)
+		if(iNext <= 0 || iLast < iNext)
 		{
-			rad++;
+			// ...increase the radius.
 			
-			// ...increase the radius.			
-			iNext = index(aMin, rad);			
-			iMax = index(aMax, rad);
+			rad++;
+			System.out.println("Increasing radius to " + rad + ".");
+			computeNext();
+			computeLast();
 		}
 
+		isActive = true;
 		return curr;
+	}
+
+	private void computeNext()
+	{
+		int k = 0;
+		float aMin = Minimum();
+		while(aMin >= -Floats.PI / 2)
+		{
+			aMin -= Floats.PI / 2;
+			k++;
+		}
+		
+		
+		float sin = Floats.sin(aMin);
+		float cos = Floats.cos(aMin);
+		
+		float xMin = (-rSrc - rad * cos) / (sin + cos);
+		float yMin = (+rSrc - rad * sin) / (sin + cos);
+		
+		int xTop = (int) Floats.floor(xMin);
+		int yTop = (int) Floats.ceil (yMin);
+		
+		
+		float xDst = xMin - xTop;
+		float yDst = yMin - yTop;
+		
+		if(xDst * xDst + yDst * yDst > rTgt * rTgt)
+			iNext = k * rad - yTop + 1;
+		else
+			iNext = k * rad - yTop;
+		
+		System.out.println("Next Tile: " + iNext + " (" + (Minimum() / Floats.PI) + " Pi).");
+	}
+
+	private void computeLast()
+	{
+		int k = 0;
+		float aMax = Maximum();
+		while(aMax >= -Floats.PI / 2)
+		{
+			aMax -= Floats.PI / 2;
+			k++;
+		}
+		
+		
+		float sin = Floats.sin(aMax);
+		float cos = Floats.cos(aMax);
+		
+		float xMin = (+rSrc - rad * cos) / (sin + cos);
+		float yMin = (-rSrc - rad * sin) / (sin + cos);
+		
+		int xBot = (int) Floats.ceil (xMin);
+		int yBot = (int) Floats.floor(yMin);
+		
+		
+		float xDst = xMin - xBot;
+		float yDst = yMin - yBot;
+		
+		if(xDst * xDst + yDst * yDst > rTgt * rTgt)
+			iLast = k * rad - yBot - 1;
+		else
+			iLast = k * rad - yBot;
+
+		System.out.println("Last Tile: " + iLast + " (" + (Maximum() / Floats.PI) + " Pi).");
 	}
 }

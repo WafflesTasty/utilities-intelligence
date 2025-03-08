@@ -2,10 +2,9 @@ package waffles.utils.intel.graphs.rays.iterator;
 
 import java.util.Iterator;
 
+import waffles.utils.geom.spaces.index.TiledSpace2D;
 import waffles.utils.geom.spaces.index.tiles.Tiled2D;
 import waffles.utils.intel.graphs.rays.RayCaster;
-import waffles.utils.intel.graphs.rays.RayIndex;
-import waffles.utils.intel.graphs.rays.index.RayCone;
 import waffles.utils.sets.queues.Queue;
 import waffles.utils.sets.queues.delegate.JFIFOQueue;
 import waffles.utils.tools.primitives.Floats;
@@ -28,8 +27,9 @@ import waffles.utils.tools.primitives.Floats;
 public class RayIterator<T extends Tiled2D> implements Iterator<T>
 {
 	private T next;
-	private RayCaster<T> src;
+	private RayDiamond dmd;	
 	private Queue<RayDiamond> cones;
+	private RayCaster<T> src;
 	
 	/**
 	 * Creates a new {@code RayIterator}.
@@ -42,11 +42,16 @@ public class RayIterator<T extends Tiled2D> implements Iterator<T>
 	public RayIterator(RayCaster<T> c)
 	{
 		cones = new JFIFOQueue<>();
-		cones.push(new RayDiamond(-Floats.PI, 0));
-		cones.push(new RayDiamond(0, +Floats.PI));
-		
 		next = c.Tile();
 		src = c;
+		
+		dmd = new RayDiamond(c);
+		dmd.setMaximum(0);
+		cones.push(dmd);
+
+		dmd = new RayDiamond(c);
+		dmd.setMinimum(0);
+		cones.push(dmd);
 	}
 
 	
@@ -62,12 +67,14 @@ public class RayIterator<T extends Tiled2D> implements Iterator<T>
 		}
 		
 		// Find the next diamond.
-		RayDiamond dmd = cones.peek();
-		System.out.println("Cone [" + dmd.Minimum() + ", " + dmd.Maximum() + ", " + dmd.Diagonal() + "] :");
+		dmd = cones.peek();
+		System.out.println(dmd + ":");
+		
 		// If it exceeds the max diagonal...
 		if(src.Diagonal() < dmd.Diagonal())
 		{
 			System.out.println("The cone exceeds maximum diagonal.");
+			
 			// ...remove it, and
 			cones.pop();
 			// find the next tile.
@@ -82,7 +89,8 @@ public class RayIterator<T extends Tiled2D> implements Iterator<T>
 		int c = crds[1] + cen.Column();
 		
 		// Compute the next tile.
-		next = (T) cen.Parent().get(r, c);
+		TiledSpace2D<?> space = cen.Parent();
+		next = (T) space.get(r, c);
 
 		// If no tile was found...
 		if(next == null)
@@ -96,45 +104,62 @@ public class RayIterator<T extends Tiled2D> implements Iterator<T>
 		if(src.blocksRay(next))
 		{
 			System.out.println("The tile blocks rays.");
+
+			float rSrc = src.SourceRadius();
+			float rTgt = src.TargetRadius();
 			
-			RayIndex index = src.RayIndex();
-			RayCone cone = index.get(crds);
+			System.out.println("Source Radius: " + rSrc);
+			System.out.println("Target Radius: " + rTgt);
 			
-			// ...clip the diamond.			
-			float aMin = cone.Minimum();
-			float aMax = cone.Maximum();
-						
-			if(crds[0] == 0 && crds[1] < 0)
+			float norm = Floats.sqrt(crds[0] * crds[0] + crds[1] * crds[1]);
+			float asin = Floats.asin((rSrc + rTgt) / norm);
+			float atan = Floats.atan2(crds[0], crds[1]);
+
+			System.out.println("Tile Norm: " + norm);
+			
+			float dMin = dmd.Minimum();
+			float dMax = dmd.Maximum();
+			int dRad = dmd.Diagonal();
+			
+			float aMin = atan - asin;
+			float aMax = atan + asin;
+			
+			System.out.println("Minimum Angle: " + (aMin / Floats.PI) + " Pi");
+			System.out.println("Maximum Angle: " + (aMax / Floats.PI) + " Pi");
+			
+			// If the diamond is above the minimum...
+			if(dmd.isAbove(aMin))
 			{
-				if(cone.contains(aMin))
-					dmd.setMinimum(aMin);
-				if(cone.contains(aMax))
-					dmd.setMaximum(aMax);
-				
-				return next;
-			}
-			
-			if(cone.isAbove(aMin))
-			{
-				if(cone.isBelow(aMax))
+				// ...and below the maximum...
+				if(dmd.isBelow(aMax))
 				{
+					// ...drop the diamond.
 					cones.pop();
+					// Return the tile.
 					return next;
 				}
 				
+				// ...update the diamond minimum.
 				dmd.setMinimum(aMax);
-				return next;
-			}
-			
-			if(cone.isBelow(aMax))
-			{
-				dmd.setMaximum(aMin);
+				// Return the tile.
 				return next;
 			}
 
-			float cMin = dmd.Minimum();
+			// If the diamond is below the maximum...
+			if(dmd.isBelow(aMax))
+			{
+				// ...update the diamond maximum.
+				dmd.setMaximum(aMin);
+				// Return the tile.
+				return next;
+			}
+
+			// Update the diamond minimum.
 			dmd.setMinimum(aMax);
-			dmd = new RayDiamond(cMin, aMin, r+1);
+			// Create and add a second diamond.
+			dmd = new RayDiamond(src, dRad+1);
+			dmd.setMinimum(dMin);
+			dmd.setMaximum(aMin);
 			cones.push(dmd);
 		}
 		
