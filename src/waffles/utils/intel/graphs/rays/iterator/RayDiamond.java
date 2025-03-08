@@ -56,13 +56,18 @@ public class RayDiamond implements Partition, Iterator<int[]>
 	 */
 	public RayDiamond(RayCaster<?> c, int r)
 	{		
+		rad = r;
+		isActive = false;
+		
 		rSrc = c.SourceRadius();
 		rTgt = c.TargetRadius();
-		
+
 		iNext = 0; iLast = 4 * r;
-		cone = Intervals.RADIANS;
-		isActive = false;
-		rad = r;
+		cone = Intervals.create
+		(
+			Cuts.Above(-Floats.PI),
+			Cuts.Below(+Floats.PI)
+		);
 	}
 
 	
@@ -78,7 +83,7 @@ public class RayDiamond implements Partition, Iterator<int[]>
 		
 		cone = Intervals.create
 		(
-			Cuts.Below(min),
+			Cuts.Above(min),
 			cone.Maximum()
 		);
 		
@@ -217,6 +222,7 @@ public class RayDiamond implements Partition, Iterator<int[]>
 			iNext = k * rad - yTop + 1;
 		else
 			iNext = k * rad - yTop;
+		System.out.println("Next: " + iNext + ".");
 	}
 
 	private void computeLast()
@@ -247,5 +253,6 @@ public class RayDiamond implements Partition, Iterator<int[]>
 			iLast = k * rad - yBot - 1;
 		else
 			iLast = k * rad - yBot;
+		System.out.println("Last: " + iLast + ".");
 	}
 }
