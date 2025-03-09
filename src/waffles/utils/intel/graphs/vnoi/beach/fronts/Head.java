@@ -14,7 +14,7 @@ import waffles.utils.lang.enums.Extreme;
  *
  * @author Waffles
  * @since 29 Sep 2024
- * @version 1.1
+ * @version 1.0
  * 
  * 
  * @see Front

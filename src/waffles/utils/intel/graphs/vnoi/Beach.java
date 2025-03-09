@@ -20,7 +20,7 @@ import waffles.utils.tools.primitives.Floats;
  *
  * @author Waffles
  * @since 18 Sep 2024
- * @version 1.1
+ * @version 1.0
  * 
  * 
  * @param <P>  a positioned type

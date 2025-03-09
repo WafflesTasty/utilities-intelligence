@@ -14,7 +14,7 @@ import waffles.utils.tools.collections.Iterables;
  *
  * @author Waffles
  * @since 22 Sep 2024
- * @version 1.1
+ * @version 1.0
  *
  * 
  * @param <P>  a positioned type

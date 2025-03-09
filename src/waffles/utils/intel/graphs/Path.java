@@ -10,7 +10,7 @@ import waffles.utils.sets.queues.delegate.JDeque;
  *
  * @author Waffles
  * @since 29 Mar 2024
- * @version 1.1
+ * @version 1.0
  *
  *
  * @param <O>  an object type

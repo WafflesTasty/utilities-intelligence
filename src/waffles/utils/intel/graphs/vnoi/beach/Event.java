@@ -12,7 +12,7 @@ import waffles.utils.tools.primitives.Floats;
  *
  * @author Waffles
  * @since 22 Sep 2024
- * @version 1.1
+ * @version 1.0
  *
  * 
  * @see Positioned2D

@@ -16,7 +16,7 @@ import waffles.utils.intel.graphs.vnoi.beach.fronts.Wedge;
  * 
  * @author Waffles
  * @since 24 Sep 2024
- * @version 1.1
+ * @version 1.0
  * 
  * 
  * @see Event
