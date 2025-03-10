@@ -3,81 +3,60 @@ package waffles.utils.intel.bham;
 import java.util.Iterator;
 
 import waffles.utils.algebra.elements.linear.vector.Vector;
-import waffles.utils.geom.spaces.index.IndexSpace;
-import waffles.utils.geom.spaces.index.tiles.Tiled;
 import waffles.utils.tools.patterns.semantics.Idleable;
 import waffles.utils.tools.primitives.Array;
 
 /**
- * The {@code IndexBresenham} algorithm performs Bresenham's line algorithm in an {@code IndexSpace}.
+ * The {@code IndexBresenham} algorithm performs Bresenham's line algorithm with integer indices.
  *
  * @author Waffles
  * @since 09 Mar 2025
  * @version 1.0
  *
  *
- * @param <O>  an object type
  * @see Idleable
  * @see Iterator
- * @see Tiled
  */
-public class IndexBresenham<O> implements Iterator<O>, Idleable
+public class IndexBresenham implements Iterator<int[]>, Idleable
 {
 	private boolean isIdle;
 	private int[] curr, last;
-	private IndexSpace<O> space;
 	private Bresenham bham;
 	
 	/**
 	 * Creates a new {@code IndexBresenham}.
 	 * 
-	 * @param s  an index space
-	 * 
-	 * 
-	 * @see IndexSpace
+	 * @param ord  a dimension order
 	 */
-	public IndexBresenham(IndexSpace<O> s)
+	public IndexBresenham(int ord)
 	{
+		curr = new int[ord];
+		last = new int[ord];
 		isIdle = true;
-		space = s;
 	}
 
 	/**
-	 * Initializes the {@code TiledBresenham}.
+	 * Initializes the {@code IndexBresenham}.
 	 * 
 	 * @param src  a source coordinate
 	 * @param tgt  a target coordinate
 	 */
 	public void initialize(int[] src, int[] tgt)
 	{
-		int ord = space.Order();
-
+		int ord = curr.length;
 		float[] dir = new float[ord];
 		for(int i = 0; i < ord; i++)
 		{
 			dir[i] = tgt[i] - src[i];
 		}
 		
-		
+		curr = Array.copy.of(src);
+		last = Array.copy.of(tgt);
 		bham = new Bresenham(dir);
 		isIdle = false;
-		curr = src;
-		last = tgt;
 	}
 
-	
-	private int[] findNext()
-	{
-		Vector v = bham.next();
-		
-		for(int i = 0; i < v.Size(); i++)
-		{
-			curr[i] += (int) v.get(i);
-		}
-		
-		return curr;
-	}
-	
+
 	@Override
 	public boolean hasNext()
 	{
@@ -91,16 +70,20 @@ public class IndexBresenham<O> implements Iterator<O>, Idleable
 	}
 	
 	@Override
-	public O next()
+	public int[] next()
 	{
-		O next = space.get(curr);
+		Vector v = bham.next();
 		
-		curr = findNext();
+		for(int i = 0; i < v.Size(); i++)
+		{
+			curr[i] += (int) v.get(i);
+		}
+		
 		if(Array.equals.of(curr, last))
 		{
 			isIdle = true;
 		}
 		
-		return next;
+		return curr;
 	}
 }

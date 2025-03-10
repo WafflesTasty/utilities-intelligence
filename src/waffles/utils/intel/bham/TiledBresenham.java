@@ -21,7 +21,8 @@ import waffles.utils.tools.patterns.semantics.Idleable;
  */
 public class TiledBresenham<T extends Tiled> implements Iterator<T>, Idleable
 {
-	private IndexBresenham<T> bham;
+	private TiledSpace<T> space;
+	private IndexBresenham bham;
 	
 	/**
 	 * Creates a new {@code IndexBresenham}.
@@ -33,7 +34,8 @@ public class TiledBresenham<T extends Tiled> implements Iterator<T>, Idleable
 	 */
 	public TiledBresenham(TiledSpace<T> s)
 	{
-		bham = new IndexBresenham<>(s);
+		bham = new IndexBresenham(s.Order());
+		space = s;
 	}
 
 	/**
@@ -74,6 +76,7 @@ public class TiledBresenham<T extends Tiled> implements Iterator<T>, Idleable
 	@Override
 	public T next()
 	{
-		return bham.next();
+		int[] next = bham.next();
+		return space.get(next);
 	}
 }
