@@ -4,13 +4,13 @@ import java.util.Iterator;
 
 import waffles.utils.geom.spaces.index.TiledSpace2D;
 import waffles.utils.geom.spaces.index.tiles.Tiled2D;
-import waffles.utils.intel.grids.RayCaster;
+import waffles.utils.intel.grids.FOVCaster;
 import waffles.utils.sets.queues.Queue;
 import waffles.utils.sets.queues.delegate.JFIFOQueue;
 import waffles.utils.tools.primitives.Floats;
 
 /**
- * The {@code RayIterator} provides the main iteration loop of a {@code RayCaster}.
+ * The {@code FOVIterator} provides the main iteration loop of a {@code FOVCaster}.
  * It iterates the grid around its source tile in expanding diamond shapes. Initially,
  * the iterator loops around a full cone (from -Pi to Pi). Whenever a tile blocks the
  * raycaster, the cone is split into subcones, defining the remaining viewspace.
@@ -24,32 +24,32 @@ import waffles.utils.tools.primitives.Floats;
  * @see Iterator
  * @see Tiled2D
  */
-public class RayIterator<T extends Tiled2D> implements Iterator<T>
+public class FOVIterator<T extends Tiled2D> implements Iterator<T>
 {
 	private T next;
-	private RayDiamond dmd;	
-	private Queue<RayDiamond> cones;
-	private RayCaster<T> src;
+	private FOVDiamond dmd;	
+	private Queue<FOVDiamond> cones;
+	private FOVCaster<T> src;
 	
 	/**
-	 * Creates a new {@code RayIterator}.
+	 * Creates a new {@code FOVIterator}.
 	 * 
 	 * @param c  a ray caster
 	 * 
 	 * 
-	 * @see RayCaster
+	 * @see FOVCaster
 	 */
-	public RayIterator(RayCaster<T> c)
+	public FOVIterator(FOVCaster<T> c)
 	{
 		cones = new JFIFOQueue<>();
 		next = c.Tile();
 		src = c;
 		
-		dmd = new RayDiamond(c);
+		dmd = new FOVDiamond(c);
 		dmd.setMaximum(.0f);
 		cones.push(dmd);
 
-		dmd = new RayDiamond(c);
+		dmd = new FOVDiamond(c);
 		dmd.setMinimum(.0f);
 		cones.push(dmd);
 	}
@@ -165,7 +165,7 @@ public class RayIterator<T extends Tiled2D> implements Iterator<T>
 			// Update the diamond minimum.
 			dmd.setMinimum(aMax);
 			// Create and add a second diamond.
-			dmd = new RayDiamond(src, dRad+1);
+			dmd = new FOVDiamond(src, dRad+1);
 			dmd.setMinimum(dMin);
 			dmd.setMaximum(aMin);
 			cones.push(dmd);

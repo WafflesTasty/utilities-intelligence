@@ -3,10 +3,10 @@ package waffles.utils.intel.grids;
 import java.util.Iterator;
 
 import waffles.utils.geom.spaces.index.tiles.Tiled2D;
-import waffles.utils.intel.grids.rays.RayIterator;
+import waffles.utils.intel.grids.rays.FOVIterator;
 
 /**
- * A {@code RayCaster} defines an {{@link #iterator()} which performs a raycasting algorithm on a
+ * A {@code FOVCaster} defines an {{@link #iterator()} which performs a raycasting algorithm on a
  * {@code Tiled2D} grid. The field of view is determined by a queue of {@code RayCones}, which is
  * initialized with two cones spanning the intervals [-\u03c0, 0] and [0, +\u03c0]. The iterator
  * pass through all tiles around the source tile by looping around it in diamond shapes of
@@ -22,17 +22,17 @@ import waffles.utils.intel.grids.rays.RayIterator;
  * @see Iterable
  * @see Tiled2D
  */
-public interface RayCaster<T extends Tiled2D> extends Iterable<T>
+public interface FOVCaster<T extends Tiled2D> extends Iterable<T>
 {
 	/**
-	 * Returns the tile of the {@code RayCaster}.
+	 * Returns the tile of the {@code FOVCaster}.
 	 * 
 	 * @return  a center tile
 	 */
 	public abstract T Tile();
 	
 	/**
-	 * Returns the diagonal of the {@code RayCaster}.
+	 * Returns the diagonal of the {@code FOVCaster}.
 	 * 
 	 * @return  a diagonal radius
 	 */
@@ -40,7 +40,7 @@ public interface RayCaster<T extends Tiled2D> extends Iterable<T>
 	
 	
 	/**
-	 * Returns the source radius of the {@code RayCaster}.
+	 * Returns the source radius of the {@code FOVCaster}.
 	 * This can be any value in the range of [0.0, 1.0], and
 	 * defines the radius of the circle within the source
 	 * tile from which rays will be cast.
@@ -53,7 +53,7 @@ public interface RayCaster<T extends Tiled2D> extends Iterable<T>
 	}
 
 	/**
-	 * Returns the target radius of the {@code RayCaster}.
+	 * Returns the target radius of the {@code FOVCaster}.
 	 * This can be any value in the range of [0.0, 1.0], and
 	 * defines the radius of the circle within the target
 	 * tile towards which rays will be cast.
@@ -66,7 +66,7 @@ public interface RayCaster<T extends Tiled2D> extends Iterable<T>
 	}
 	
 	/**
-	 * Checks if a tile blocks the {@code RayCaster}.
+	 * Checks if a tile blocks the {@code FOVCaster}.
 	 * 
 	 * @param tile  a grid tile
 	 * @return  {@code true} if it blocks rays
@@ -80,6 +80,6 @@ public interface RayCaster<T extends Tiled2D> extends Iterable<T>
 	@Override
 	public default Iterator<T> iterator()
 	{
-		return new RayIterator<>(this);
+		return new FOVIterator<>(this);
 	}
 }

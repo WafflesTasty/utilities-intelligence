@@ -6,12 +6,12 @@ import waffles.utils.algebra.Partition;
 import waffles.utils.algebra.elements.interval.Cuts;
 import waffles.utils.algebra.elements.interval.Interval;
 import waffles.utils.algebra.elements.interval.Intervals;
-import waffles.utils.intel.grids.RayCaster;
+import waffles.utils.intel.grids.FOVCaster;
 import waffles.utils.tools.primitives.Floats;
 import waffles.utils.tools.primitives.Integers;
 
 /**
- * A {@code RayDiamond} iterates over a single diamond in a {@code RayIterator}.
+ * A {@code FOVDiamond} iterates over a single diamond in a {@code FOVIterator}.
  * Each cone is iterated in a diamond pattern, starting from the tile at the low
  * angle of the cone and moving towards the high angle. Once the high angle is
  * reached, the radius is increased and iteration begins again.
@@ -24,7 +24,7 @@ import waffles.utils.tools.primitives.Integers;
  * @see Partition
  * @see Iterator
  */
-public class RayDiamond implements Partition, Iterator<int[]>
+public class FOVDiamond implements Partition, Iterator<int[]>
 {
 	private int rad;
 	private int iNext, iLast;
@@ -33,14 +33,14 @@ public class RayDiamond implements Partition, Iterator<int[]>
 	private Interval cone;
 	
 	/**
-	 * Creates a new {@code RayDiamond}.
+	 * Creates a new {@code FOVDiamond}.
 	 * 
 	 * @param c  a raycaster
 	 * 
 	 * 
-	 * @see RayCaster
+	 * @see FOVCaster
 	 */
-	public RayDiamond(RayCaster<?> c)
+	public FOVDiamond(FOVCaster<?> c)
 	{
 		this(c, 1);
 	}
@@ -52,9 +52,9 @@ public class RayDiamond implements Partition, Iterator<int[]>
 	 * @param r  a radius
 	 * 
 	 * 
-	 * @see RayCaster
+	 * @see FOVCaster
 	 */
-	public RayDiamond(RayCaster<?> c, int r)
+	public FOVDiamond(FOVCaster<?> c, int r)
 	{		
 		rad = r;
 		isActive = false;
@@ -72,7 +72,7 @@ public class RayDiamond implements Partition, Iterator<int[]>
 
 	
 	/**
-	 * Changes the minimum angle of the {@code RayDiamond}.
+	 * Changes the minimum angle of the {@code FOVDiamond}.
 	 * 
 	 * @param min  a minimum angle
 	 */
@@ -94,7 +94,7 @@ public class RayDiamond implements Partition, Iterator<int[]>
 	}
 
 	/**
-	 * Changes the maximum angle of the {@code RayDiamond}.
+	 * Changes the maximum angle of the {@code FOVDiamond}.
 	 * 
 	 * @param max  a maximum angle
 	 */
