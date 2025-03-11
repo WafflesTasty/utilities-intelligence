@@ -73,7 +73,7 @@ public class Bresenham implements Iterator<Vector>
 			{
 				float sign = Floats.sign(e);
 				
-				e += -sign * dMax;
+				e -= sign * dMax;
 				next.set(sign, i);
 			}
 
