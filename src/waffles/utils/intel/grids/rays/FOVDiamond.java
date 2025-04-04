@@ -222,7 +222,6 @@ public class FOVDiamond implements Partition, Iterator<int[]>
 			iNext = k * rad - yTop + 1;
 		else
 			iNext = k * rad - yTop;
-		System.out.println("Next: " + iNext + ".");
 	}
 
 	private void computeLast()
@@ -253,6 +252,5 @@ public class FOVDiamond implements Partition, Iterator<int[]>
 			iLast = k * rad - yBot - 1;
 		else
 			iLast = k * rad - yBot;
-		System.out.println("Last: " + iLast + ".");
 	}
 }

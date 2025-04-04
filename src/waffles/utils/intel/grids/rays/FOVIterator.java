@@ -76,14 +76,14 @@ public class FOVIterator<T extends Tiled2D> implements Iterator<T>
 			return findNext();
 		}
 		
-		System.out.println("Diamond: [ " + dmd.Minimum() + ", " + dmd.Maximum() + " ].");
+		
 		T cen = src.Tile();
 		
 		int[] crds = dmd.next();
 		int r = crds[0] + cen.Row();
 		int c = crds[1] + cen.Column();
 		
-		System.out.println("Next: [ " + crds[0] + ", " + crds[1] + "].");		
+
 		// Compute the next tile.
 		TiledSpace2D<?> space = cen.Parent();
 		next = (T) space.get(r, c);
@@ -98,8 +98,6 @@ public class FOVIterator<T extends Tiled2D> implements Iterator<T>
 		// If the tile blocks rays...
 		if(src.blocksRay(next))
 		{
-			System.out.println("The tile blocks rays.");
-			
 			float rSrc = src.SourceRadius();
 			float rTgt = src.TargetRadius();
 
@@ -118,33 +116,24 @@ public class FOVIterator<T extends Tiled2D> implements Iterator<T>
 			float aMax = Floats.normrad(atan + asin);
 			if(crds[0] < 0 && crds[1] == 0)
 			{
-				System.out.println("Special case x < 0 && y = 0:");
-				System.out.println("The diamond minimum is set to " + aMax + ".");
-				System.out.println("The diamond maximum is set to " + aMin + ".");
 				dmd.setMinimum(aMax);
 				dmd.setMaximum(aMin);
 				return next;
 			}
 
-			
-			System.out.println("Atan: " + atan + ", Asin: " + asin + ".");
-			System.out.println("Min: " + aMin + ", Max: " + aMax + ".");
-			
+
 			// If the diamond is above the minimum...
 			if(dmd.isAbove(aMin))
 			{
 				// ...and below the maximum...
 				if(dmd.isBelow(aMax))
 				{
-					System.out.println("The diamond is dropped.");
-					
 					// ...drop the diamond.
 					cones.pop();
 					// Return the tile.
 					return next;
 				}
 				
-				System.out.println("The diamond minimum is set to " + aMax + ".");
 				// ...update the diamond minimum.
 				dmd.setMinimum(aMax);
 				// Return the tile.
@@ -154,14 +143,12 @@ public class FOVIterator<T extends Tiled2D> implements Iterator<T>
 			// If the diamond is below the maximum...
 			if(dmd.isBelow(aMax))
 			{
-				System.out.println("The diamond maximum is set to " + aMin + ".");
 				// ...update the diamond maximum.
 				dmd.setMaximum(aMin);
 				// Return the tile.
 				return next;
 			}
 			
-			System.out.println("The diamond is split into [" + dMin + " : " + aMin + "]::[" + aMax + " : " + dMax + "].");
 			// Update the diamond minimum.
 			dmd.setMinimum(aMax);
 			// Create and add a second diamond.
