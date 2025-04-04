@@ -85,18 +85,21 @@ public class FOVIterator<T extends Tiled2D> implements Iterator<T>
 		
 
 		// Compute the next tile.
+		boolean isBlocked = false;
 		TiledSpace2D<?> space = cen.Parent();
-		next = (T) space.get(r, c);
-
-		// If no tile was found...
-		if(next == null)
+		if(space.contains(r, c))
 		{
-			// ...find the next tile.
-			return findNext();
+			next = (T) space.get(r, c);
+			isBlocked = src.blocksRay(next);
 		}
-		
+		else
+		{
+			isBlocked = true;
+			next = null;
+		}
+
 		// If the tile blocks rays...
-		if(src.blocksRay(next))
+		if(isBlocked)
 		{
 			float rSrc = src.SourceRadius();
 			float rTgt = src.TargetRadius();
